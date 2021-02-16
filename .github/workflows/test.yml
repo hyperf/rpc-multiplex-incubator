@@ -3,18 +3,20 @@ name: PHPUnit
 on: [ push, pull_request ]
 
 env:
-  SWOOLE_VERSION: '4.6.3'
   SWOW_VERSION: 'develop'
 
 jobs:
   ci:
-    name: Test PHP ${{ matrix.php-version }} on ${{ matrix.engine }}
+    name: Test PHP ${{ matrix.php-version }} on Swoole ${{ matrix.swoole-version }}
     runs-on: "${{ matrix.os }}"
+    env:
+      SWOOLE_VERSION: ${{ matrix.swoole-version }}
     strategy:
       matrix:
         os: [ ubuntu-latest ]
         php-version: [ '7.3', '7.4' ]
         engine: [ 'swoole' ]
+        swoole-version: [ '4.5.11', '4.6.3' ]
       max-parallel: 5
     steps:
       - name: Checkout
@@ -48,7 +50,6 @@ jobs:
           tar -xf swow.tar.gz -C swow --strip-components=1
           rm swow.tar.gz
           cd swow/ext || exit
-
           phpize
           ./configure --enable-debug
           make -j "$(nproc)"
@@ -56,7 +57,7 @@ jobs:
           sudo sh -c "echo extension=swow > /etc/php/${{ matrix.php-version }}/cli/conf.d/swow.ini"
           php --ri swow
       - name: Setup Packages
-        run: composer update -o --no-scripts
+        run: composer update -o
       - name: Run Test Cases
         run: |
           composer analyse
