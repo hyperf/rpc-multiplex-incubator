@@ -97,7 +97,7 @@ class TcpServer extends Server
 
             Context::set(Constant::CHANNEL_ID, $packet->getId());
 
-            parent::onReceive($server, $fd, $fromId, $data);
+            parent::onReceive($server, $fd, $fromId, $packet->getBody());
         });
     }
 

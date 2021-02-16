@@ -45,7 +45,7 @@ class DataFormatter implements DataFormatterInterface, DataFetcherInterface
         [$id, $result] = $data;
         return [
             Constant::ID => $id,
-            Constant::DATA => $result,
+            Constant::RESULT => $result,
             Constant::CONTEXT => $this->context->getData(),
         ];
     }

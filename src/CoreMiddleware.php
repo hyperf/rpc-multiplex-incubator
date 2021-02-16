@@ -71,7 +71,7 @@ class CoreMiddleware extends \Hyperf\RpcServer\CoreMiddleware
                 throw $exception;
             }
         }
-        return $response;
+        return $this->buildData($request, $response);
     }
 
     protected function handleNotFound(ServerRequestInterface $request)
@@ -94,5 +94,12 @@ class CoreMiddleware extends \Hyperf\RpcServer\CoreMiddleware
         $id = $request->getAttribute(Constant::REQUEST_ID);
 
         return $this->dataFormatter->formatErrorResponse([$id, $code, $message ?? Response::getReasonPhraseByCode($code)]);
+    }
+
+    protected function buildData(ServerRequestInterface $request, $response): array
+    {
+        $id = $request->getAttribute(Constant::REQUEST_ID);
+
+        return $this->dataFormatter->formatResponse([$id, $response]);
     }
 }

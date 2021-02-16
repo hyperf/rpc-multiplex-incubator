@@ -18,6 +18,7 @@ use Hyperf\RpcMultiplex\Constant;
 use Hyperf\RpcMultiplex\DataFormatter;
 use Hyperf\RpcMultiplex\Packer\JsonPacker;
 use Hyperf\RpcMultiplex\PathGenerator;
+use Hyperf\RpcMultiplex\Transporter;
 
 class RegisterProtocolListener implements ListenerInterface
 {
@@ -46,7 +47,7 @@ class RegisterProtocolListener implements ListenerInterface
     {
         $this->protocolManager->register(Constant::PROTOCOL_DEFAULT, [
             'packer' => JsonPacker::class,
-            // 'transporter' => JsonRpcTransporter::class,
+            'transporter' => Transporter::class,
             'path-generator' => PathGenerator::class,
             'data-formatter' => DataFormatter::class,
         ]);

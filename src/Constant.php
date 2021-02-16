@@ -23,6 +23,8 @@ class Constant
 
     const DATA = 'data';
 
+    const RESULT = 'result';
+
     const CONTEXT = 'context';
 
     const ERROR = 'error';
