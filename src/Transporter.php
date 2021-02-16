@@ -13,6 +13,7 @@ namespace Hyperf\RpcMultiplex;
 
 use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\Rpc\Contract\TransporterInterface;
+use Hyperf\RpcMultiplex\Exception\NotSupportException;
 use Hyperf\Utils\Collection;
 
 class Transporter implements TransporterInterface
@@ -23,34 +24,34 @@ class Transporter implements TransporterInterface
     protected $config;
 
     /**
-     * @var null|Client
+     * @var null|Socket
      */
-    protected $client;
+    protected $socket;
 
     public function __construct(array $config = [])
     {
         $this->config = new Collection(array_replace_recursive($this->getDefaultConfig(), $config));
-        $this->client = make(Client::class);
+        $this->socket = make(Socket::class);
     }
 
     public function send(string $data)
     {
-        // TODO: Implement send() method.
+        return $this->socket->request($data);
     }
 
     public function recv()
     {
-        // TODO: Implement recv() method.
+        throw new NotSupportException('Recv is not supported.');
     }
 
     public function getLoadBalancer(): ?LoadBalancerInterface
     {
-        return $this->client->getLoadBalancer();
+        return $this->socket->getLoadBalancer();
     }
 
     public function setLoadBalancer(LoadBalancerInterface $loadBalancer): TransporterInterface
     {
-        $this->client->setLoadBalancer($loadBalancer);
+        $this->socket->setLoadBalancer($loadBalancer);
         return $this;
     }
 

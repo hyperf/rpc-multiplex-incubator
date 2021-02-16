@@ -14,6 +14,7 @@ namespace HyperfTest\Stub;
 use Hyperf\Di\Container;
 use Hyperf\Utils\ApplicationContext;
 use Mockery;
+use Multiplex\Constract\PackerInterface;
 use Multiplex\Packer;
 
 class ContainerStub
@@ -22,7 +23,7 @@ class ContainerStub
     {
         $container = Mockery::mock(Container::class);
         ApplicationContext::setContainer($container);
-        $container->shouldReceive('get')->with(Packer::class)->andReturn(new Packer());
+        $container->shouldReceive('get')->with(PackerInterface::class)->andReturn(new Packer());
         return $container;
     }
 }

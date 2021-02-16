@@ -18,7 +18,7 @@ use Multiplex\Constract\SerializerInterface;
 use Psr\Container\ContainerInterface;
 use Swoole\Coroutine\Client as SwooleClient;
 
-class Client extends \Multiplex\Socket\Client
+class Socket extends \Multiplex\Socket\Client
 {
     /**
      * @var callable
