@@ -1,5 +1,7 @@
-# component-creater
+# Rpc for multiplexing connection
 
 ```
-composer create-project hyperf/component-creater
+composer create-project hyperf/rpc-multiplex-incubator
 ```
+
+

@@ -6,7 +6,7 @@
         "php",
         "hyperf"
     ],
-    "description": "",
+    "description": "Rpc for multiplexing connection",
     "autoload": {
         "psr-4": {
             "Hyperf\\RpcMultiplex\\": "src/"
@@ -18,7 +18,8 @@
         }
     },
     "require": {
-        "php": ">=7.3"
+        "php": ">=7.3",
+        "multiplex/socket": "^0.1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
