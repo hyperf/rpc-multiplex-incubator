@@ -22,7 +22,7 @@ class ContainerStub
     {
         $container = Mockery::mock(Container::class);
         ApplicationContext::setContainer($container);
-        $container->shouldReceive('make')->with(Packer::class, Mockery::any())->andReturn(new Packer());
+        $container->shouldReceive('get')->with(Packer::class)->andReturn(new Packer());
         return $container;
     }
 }

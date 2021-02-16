@@ -26,7 +26,7 @@ use Hyperf\Server\Exception\InvalidArgumentException;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Hyperf\Utils\Coroutine;
-use Multiplex\Packer;
+use Multiplex\Constract\PackerInterface as PacketPacker;
 use Multiplex\Packet;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -62,7 +62,7 @@ class TcpServer extends Server
     protected $proto;
 
     /**
-     * @var Packer
+     * @var PacketPacker
      */
     protected $packetPacker;
 
@@ -78,7 +78,7 @@ class TcpServer extends Server
 
         $this->protocolManager = $protocolManager;
         $this->proto = $protocol ?? Constant::PROTOCOL_DEFAULT;
-        $this->packetPacker = make(Packer::class);
+        $this->packetPacker = $container->get(PacketPacker::class);
     }
 
     public function initCoreMiddleware(string $serverName): void

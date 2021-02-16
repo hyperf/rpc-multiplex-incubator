@@ -14,15 +14,9 @@ namespace Hyperf\RpcMultiplex;
 use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\Rpc\Contract\TransporterInterface;
 use Hyperf\Utils\Collection;
-use Multiplex\Socket\Client;
 
 class Transporter implements TransporterInterface
 {
-    /**
-     * @var null|LoadBalancerInterface
-     */
-    protected $loadBalancer;
-
     /**
      * @var Collection
      */
@@ -36,7 +30,7 @@ class Transporter implements TransporterInterface
     public function __construct(array $config = [])
     {
         $this->config = new Collection(array_replace_recursive($this->getDefaultConfig(), $config));
-        $this->client = new Client();
+        $this->client = make(Client::class);
     }
 
     public function send(string $data)
@@ -51,12 +45,12 @@ class Transporter implements TransporterInterface
 
     public function getLoadBalancer(): ?LoadBalancerInterface
     {
-        return $this->loadBalancer;
+        return $this->client->getLoadBalancer();
     }
 
     public function setLoadBalancer(LoadBalancerInterface $loadBalancer): TransporterInterface
     {
-        $this->loadBalancer = $loadBalancer;
+        $this->client->setLoadBalancer($loadBalancer);
         return $this;
     }
 
