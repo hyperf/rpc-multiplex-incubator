@@ -3,7 +3,7 @@
 ## 安装
 
 ```
-composer create-project hyperf/rpc-multiplex-incubator
+composer require hyperf/rpc-multiplex-incubator
 ```
 
 

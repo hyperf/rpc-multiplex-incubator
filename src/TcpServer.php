@@ -12,14 +12,15 @@ declare(strict_types=1);
 namespace Hyperf\RpcMultiplex;
 
 use Hyperf\Contract\ConfigInterface;
-use Hyperf\Contract\DispatcherInterface;
 use Hyperf\Contract\PackerInterface;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandlerDispatcher;
 use Hyperf\HttpMessage\Server\Response;
 use Hyperf\HttpServer\Contract\CoreMiddlewareInterface;
 use Hyperf\Rpc\Protocol;
 use Hyperf\Rpc\ProtocolManager;
 use Hyperf\RpcMultiplex\Contract\HttpMessageBuilderInterface;
+use Hyperf\RpcServer\RequestDispatcher;
 use Hyperf\RpcServer\Server;
 use Hyperf\Server\Exception\InvalidArgumentException;
 use Hyperf\Utils\Context;
@@ -29,7 +30,6 @@ use Multiplex\Packet;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use Swoole\Coroutine\Server\Connection;
 use Swoole\Server as SwooleServer;
 
@@ -67,10 +67,10 @@ class TcpServer extends Server
 
     public function __construct(
         ContainerInterface $container,
-        DispatcherInterface $dispatcher,
+        RequestDispatcher $dispatcher,
         ExceptionHandlerDispatcher $exceptionDispatcher,
         ProtocolManager $protocolManager,
-        LoggerInterface $logger,
+        StdoutLoggerInterface $logger,
         string $protocol = null
     ) {
         parent::__construct($container, $dispatcher, $exceptionDispatcher, $logger);
