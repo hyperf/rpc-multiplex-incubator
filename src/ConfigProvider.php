@@ -11,14 +11,15 @@ declare(strict_types=1);
  */
 namespace Hyperf\RpcMultiplex;
 
+use Hyperf\RpcMultiplex\Listener\RegisterProtocolListener;
+
 class ConfigProvider
 {
     public function __invoke(): array
     {
         return [
-            'dependencies' => [
-            ],
-            'commands' => [
+            'listeners' => [
+                RegisterProtocolListener::class,
             ],
             'annotations' => [
                 'scan' => [

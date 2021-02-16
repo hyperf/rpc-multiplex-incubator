@@ -19,6 +19,7 @@
     },
     "require": {
         "php": ">=7.3",
+        "hyperf/framework": "^2.1",
         "hyperf/http-message": "^2.1",
         "hyperf/rpc": "^2.1",
         "hyperf/rpc-server": "^2.1",
