@@ -30,4 +30,11 @@ class Constant
     const PORT = 'port';
 
     const CHANNEL_ID = 'multiplex.channel_id';
+
+    const DEFAULT_SETTINGS = [
+        'open_length_check' => true,
+        'package_length_type' => 'N',
+        'package_length_offset' => 0,
+        'package_body_offset' => 4,
+    ];
 }

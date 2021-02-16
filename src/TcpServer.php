@@ -23,6 +23,7 @@ use Hyperf\RpcMultiplex\Contract\HttpMessageBuilderInterface;
 use Hyperf\RpcServer\RequestDispatcher;
 use Hyperf\RpcServer\Server;
 use Hyperf\Server\Exception\InvalidArgumentException;
+use Hyperf\Utils\Arr;
 use Hyperf\Utils\Context;
 use Hyperf\Utils\Coroutine;
 use Multiplex\Packer;
@@ -149,6 +150,21 @@ class TcpServer extends Server
         $servers = $this->container->get(ConfigInterface::class)->get('server.servers', []);
         foreach ($servers as $server) {
             if ($server['name'] === $serverName) {
+                $assert = Arr::only($server['settings'] ?? [], [
+                    'open_length_check',
+                    'package_length_type',
+                    'package_length_offset',
+                    'package_body_offset',
+                ]);
+
+                if ($assert != Constant::DEFAULT_SETTINGS) {
+                    throw new InvalidArgumentException(sprintf(
+                        'Setting of server %s is invalid. Please set settings like %s',
+                        $serverName,
+                        var_export(Constant::DEFAULT_SETTINGS, true)
+                    ));
+                }
+
                 return $this->serverConfig = $server;
             }
         }
