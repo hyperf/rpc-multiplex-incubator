@@ -28,4 +28,6 @@ class Constant
     const HOST = 'host';
 
     const PORT = 'port';
+
+    const CHANNEL_ID = 'multiplex.channel_id';
 }

@@ -22,10 +22,16 @@ use Hyperf\Rpc\ProtocolManager;
 use Hyperf\RpcMultiplex\Contract\HttpMessageBuilderInterface;
 use Hyperf\RpcServer\Server;
 use Hyperf\Server\Exception\InvalidArgumentException;
+use Hyperf\Utils\Context;
+use Hyperf\Utils\Coroutine;
+use Multiplex\Packer;
+use Multiplex\Packet;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Swoole\Coroutine\Server\Connection;
+use Swoole\Server as SwooleServer;
 
 class TcpServer extends Server
 {
@@ -54,6 +60,11 @@ class TcpServer extends Server
      */
     protected $proto;
 
+    /**
+     * @var Packer
+     */
+    protected $packetPacker;
+
     public function __construct(
         ContainerInterface $container,
         DispatcherInterface $dispatcher,
@@ -66,6 +77,7 @@ class TcpServer extends Server
 
         $this->protocolManager = $protocolManager;
         $this->proto = $protocol ?? Constant::PROTOCOL_DEFAULT;
+        $this->packetPacker = make(Packer::class);
     }
 
     public function initCoreMiddleware(string $serverName): void
@@ -75,6 +87,33 @@ class TcpServer extends Server
         $this->initProtocol();
 
         parent::initCoreMiddleware($serverName);
+    }
+
+    public function onReceive($server, int $fd, int $fromId, string $data): void
+    {
+        Coroutine::create(function () use ($server, $fd, $fromId, $data) {
+            $packet = $this->packetPacker->unpack($data);
+
+            Context::set(Constant::CHANNEL_ID, $packet->getId());
+
+            parent::onReceive($server, $fd, $fromId, $data);
+        });
+    }
+
+    /**
+     * @param Connection|SwooleServer $server
+     */
+    protected function send($server, int $fd, ResponseInterface $response): void
+    {
+        $id = Context::get(Constant::CHANNEL_ID, 0);
+
+        $packed = $this->packetPacker->pack(new Packet($id, (string) $response->getBody()));
+
+        if ($server instanceof SwooleServer) {
+            $server->send($fd, $packed);
+        } elseif ($server instanceof Connection) {
+            $server->send($packed);
+        }
     }
 
     protected function createCoreMiddleware(): CoreMiddlewareInterface
