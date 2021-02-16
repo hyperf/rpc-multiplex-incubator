@@ -13,8 +13,11 @@ namespace Hyperf\RpcMultiplex;
 
 use Hyperf\Rpc\Context;
 use Hyperf\Rpc\Contract\DataFormatterInterface;
+use Hyperf\RpcClient\Exception\RequestException;
+use Hyperf\RpcMultiplex\Contract\DataFetcherInterface;
+use Hyperf\Utils\Codec\Json;
 
-class DataFormatter implements DataFormatterInterface
+class DataFormatter implements DataFormatterInterface, DataFetcherInterface
 {
     /**
      * @var Context
@@ -30,10 +33,10 @@ class DataFormatter implements DataFormatterInterface
     {
         [$path, $params, $id] = $data;
         return [
-            'id' => $id,
-            'path' => $path,
-            'data' => $params,
-            'context' => $this->context->getData(),
+            Constant::ID => $id,
+            Constant::PATH => $path,
+            Constant::DATA => $params,
+            Constant::CONTEXT => $this->context->getData(),
         ];
     }
 
@@ -41,9 +44,9 @@ class DataFormatter implements DataFormatterInterface
     {
         [$id, $result] = $data;
         return [
-            'id' => $id,
-            'data' => $result,
-            'context' => $this->context->getData(),
+            Constant::ID => $id,
+            Constant::DATA => $result,
+            Constant::CONTEXT => $this->context->getData(),
         ];
     }
 
@@ -59,14 +62,32 @@ class DataFormatter implements DataFormatterInterface
             ];
         }
         return [
-            'jsonrpc' => '2.0',
-            'id' => $id ?? null,
-            'error' => [
-                'code' => $code,
-                'message' => $message,
-                'data' => $data,
+            Constant::ID => $id ?? null,
+            Constant::ERROR => [
+                Constant::CODE => $code,
+                Constant::MESSAGE => $message,
+                Constant::DATA => $data,
             ],
-            'context' => $this->context->getData(),
+            Constant::CONTEXT => $this->context->getData(),
         ];
+    }
+
+    public function fetch(array $data)
+    {
+        if (array_key_exists(Constant::DATA, $data)) {
+            $this->context->setData($data[Constant::CONTEXT] ?? []);
+
+            return $data[Constant::DATA];
+        }
+
+        if (array_key_exists(Constant::ERROR, $data)) {
+            throw new RequestException(
+                $data[Constant::ERROR][Constant::MESSAGE] ?? 'Invalid error message',
+                $data[Constant::ERROR][Constant::CODE] ?? 0,
+                $data[Constant::ERROR][Constant::DATA],
+            );
+        }
+
+        throw new RequestException('Unknown data ' . Json::encode($data), 0);
     }
 }

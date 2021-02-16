@@ -140,7 +140,7 @@ class TcpServer extends Server
     {
         $this->protocol = new Protocol($this->container, $this->protocolManager, $this->proto, $this->serverConfig);
         $this->packer = $this->protocol->getPacker();
-        $this->messageBuilder = make(HttpMessageBuilder::class, [
+        $this->messageBuilder = make(HttpMessageBuilderInterface::class, [
             'packer' => $this->packer,
         ]);
     }

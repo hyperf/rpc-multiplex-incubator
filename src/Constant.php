@@ -17,13 +17,19 @@ class Constant
 
     const REQUEST_ID = 'request_id';
 
+    const ID = 'id';
+
     const PATH = 'path';
 
     const DATA = 'data';
 
+    const CONTEXT = 'context';
+
     const ERROR = 'error';
 
     const CODE = 'code';
+
+    const MESSAGE = 'message';
 
     const HOST = 'host';
 

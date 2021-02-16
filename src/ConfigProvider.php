@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\RpcMultiplex;
 
+use Hyperf\RpcMultiplex\Contract\HttpMessageBuilderInterface;
 use Hyperf\RpcMultiplex\Listener\RegisterProtocolListener;
 use Multiplex\Constract\IdGeneratorInterface;
 use Multiplex\Constract\PackerInterface;
@@ -28,6 +29,7 @@ class ConfigProvider
                 IdGeneratorInterface::class => IdGenerator::class,
                 SerializerInterface::class => StringSerializer::class,
                 PackerInterface::class => Packer::class,
+                HttpMessageBuilderInterface::class => HttpMessageBuilder::class,
             ],
             'listeners' => [
                 RegisterProtocolListener::class,
