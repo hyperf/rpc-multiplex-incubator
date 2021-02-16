@@ -19,8 +19,11 @@
     },
     "require": {
         "php": ">=7.3",
+        "hyperf/http-message": "^2.1",
         "hyperf/rpc": "^2.1",
-        "hyperf/utils": "^2.1",
+        "hyperf/rpc-server": "^2.1",
+        "hyperf/server": "^2.1",
+        "hyperf/utils": "2.1.x-dev",
         "multiplex/socket": "^0.1.0"
     },
     "require-dev": {

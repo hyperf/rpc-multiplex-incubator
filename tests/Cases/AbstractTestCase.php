@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace HyperfTest\Cases;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,4 +19,16 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractTestCase extends TestCase
 {
+    protected function tearDown(): void
+    {
+        Mockery::close();
+    }
+
+    protected function invoke($class, string $method)
+    {
+        $ref = new \ReflectionClass($class);
+        $method = $ref->getMethod($method);
+        $method->setAccessible(true);
+        return $method->invoke($method);
+    }
 }

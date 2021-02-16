@@ -13,5 +13,19 @@ namespace Hyperf\RpcMultiplex;
 
 class Constant
 {
-    const DEFAULT_PROTOCOL = 'multiplex.json';
+    const PROTOCOL_DEFAULT = 'multiplex.default';
+
+    const REQUEST_ID = 'request_id';
+
+    const PATH = 'path';
+
+    const DATA = 'data';
+
+    const ERROR = 'error';
+
+    const CODE = 'code';
+
+    const HOST = 'host';
+
+    const PORT = 'port';
 }
