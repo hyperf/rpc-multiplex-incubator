@@ -26,7 +26,7 @@
         "hyperf/rpc-client": "^2.1",
         "hyperf/rpc-server": "^2.1",
         "hyperf/server": "^2.1",
-        "hyperf/utils": "2.1.x-dev",
+        "hyperf/utils": "^2.1",
         "multiplex/socket": "^0.1.0"
     },
     "require-dev": {
