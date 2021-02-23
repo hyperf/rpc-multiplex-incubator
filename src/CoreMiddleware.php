@@ -65,7 +65,7 @@ class CoreMiddleware extends \Hyperf\RpcServer\CoreMiddleware
                 $response = $controllerInstance->{$action}(...$parameters);
             } catch (\Throwable $exception) {
                 $data = $this->buildErrorData($request, 500, $exception->getMessage());
-                $response = $this->responseBuilder->buildErrorResponse($request, $data);
+                $response = $this->responseBuilder->buildResponse($request, $data);
                 $this->responseBuilder->persistToContext($response);
 
                 throw $exception;
@@ -76,7 +76,9 @@ class CoreMiddleware extends \Hyperf\RpcServer\CoreMiddleware
 
     protected function handleNotFound(ServerRequestInterface $request)
     {
-        return $this->responseBuilder->buildErrorResponse($request, 404);
+        $data = $this->buildErrorData($request, 404, 'Not Found.');
+
+        return $this->responseBuilder->buildResponse($request, $data);
     }
 
     protected function handleMethodNotAllowed(array $routes, ServerRequestInterface $request)

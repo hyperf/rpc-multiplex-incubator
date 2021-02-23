@@ -14,6 +14,7 @@ namespace Hyperf\RpcMultiplex;
 use Hyperf\Contract\IdGeneratorInterface;
 use Hyperf\Contract\NormalizerInterface;
 use Hyperf\Di\MethodDefinitionCollectorInterface;
+use Hyperf\Rpc\Contract\DataFormatterInterface;
 use Hyperf\RpcClient\AbstractServiceClient;
 use Hyperf\RpcClient\Exception\RequestException;
 use Hyperf\RpcMultiplex\Contract\DataFetcherInterface;
@@ -31,6 +32,11 @@ class Client extends AbstractServiceClient
      * @var string
      */
     protected $serviceInterface;
+
+    /**
+     * @var DataFetcherInterface|DataFormatterInterface
+     */
+    protected $dataFormatter;
 
     /**
      * @var NormalizerInterface

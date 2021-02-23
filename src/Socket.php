@@ -11,53 +11,39 @@ declare(strict_types=1);
  */
 namespace Hyperf\RpcMultiplex;
 
-use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Multiplex\Constract\IdGeneratorInterface;
 use Multiplex\Constract\PackerInterface;
 use Multiplex\Constract\SerializerInterface;
 use Psr\Container\ContainerInterface;
-use Swoole\Coroutine\Client as SwooleClient;
 
 class Socket extends \Multiplex\Socket\Client
 {
-    /**
-     * @var callable
-     */
-    protected $nodeSelector;
-
-    /**
-     * @var null|LoadBalancerInterface
-     */
-    protected $loadBalancer;
-
     public function __construct(ContainerInterface $container)
     {
         parent::__construct(
             '',
-            0,
+            80,
             $container->get(IdGeneratorInterface::class),
             $container->get(SerializerInterface::class),
             $container->get(PackerInterface::class)
         );
     }
 
-    public function getLoadBalancer(): ?LoadBalancerInterface
+    /**
+     * @return $this
+     */
+    public function setName(string $name): Socket
     {
-        return $this->loadBalancer;
+        $this->name = $name;
+        return $this;
     }
 
-    public function setLoadBalancer(LoadBalancerInterface $loadBalancer)
+    /**
+     * @return $this
+     */
+    public function setPort(int $port)
     {
-        $this->loadBalancer = $loadBalancer;
-    }
-
-    protected function makeClient(): SwooleClient
-    {
-        $node = $this->getLoadBalancer()->select();
-
-        $this->name = $node->host;
-        $this->port = $node->port;
-
-        return parent::makeClient();
+        $this->port = $port;
+        return $this;
     }
 }

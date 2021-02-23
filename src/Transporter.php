@@ -15,6 +15,7 @@ use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\Rpc\Contract\TransporterInterface;
 use Hyperf\RpcMultiplex\Exception\NotSupportException;
 use Hyperf\Utils\Collection;
+use Psr\Container\ContainerInterface;
 
 class Transporter implements TransporterInterface
 {
@@ -24,19 +25,25 @@ class Transporter implements TransporterInterface
     protected $config;
 
     /**
-     * @var null|Socket
+     * @var ContainerInterface
      */
-    protected $socket;
+    protected $container;
 
-    public function __construct(array $config = [])
+    /**
+     * @var SocketFactory
+     */
+    protected $factory;
+
+    public function __construct(ContainerInterface $container, array $config = [])
     {
         $this->config = new Collection(array_replace_recursive($this->getDefaultConfig(), $config));
-        $this->socket = make(Socket::class);
+        $this->container = $container;
+        $this->factory = make(SocketFactory::class, ['config' => $this->config]);
     }
 
     public function send(string $data)
     {
-        return $this->socket->request($data);
+        return $this->factory->get()->request($data);
     }
 
     public function recv()
@@ -46,12 +53,12 @@ class Transporter implements TransporterInterface
 
     public function getLoadBalancer(): ?LoadBalancerInterface
     {
-        return $this->socket->getLoadBalancer();
+        return $this->factory->getLoadBalancer();
     }
 
     public function setLoadBalancer(LoadBalancerInterface $loadBalancer): TransporterInterface
     {
-        $this->socket->setLoadBalancer($loadBalancer);
+        $this->factory->setLoadBalancer($loadBalancer);
         return $this;
     }
 
@@ -65,6 +72,7 @@ class Transporter implements TransporterInterface
             'recv_timeout' => 5.0,
             'retry_count' => 2,
             'retry_interval' => 100,
+            'client_count' => 4,
         ];
     }
 }
