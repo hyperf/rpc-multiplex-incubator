@@ -72,6 +72,10 @@ class SocketFactory
 
     public function get(): Socket
     {
+        if (count($this->clients) === 0) {
+            $this->refresh();
+        }
+
         return Arr::random($this->clients);
     }
 
