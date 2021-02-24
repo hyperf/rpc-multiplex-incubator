@@ -48,6 +48,8 @@ return [
 
 ## 客户端配置
 
+修改 `config/autoload/services.php` 配置文件
+
 ```php
 <?php
 
@@ -68,7 +70,7 @@ return [
                 'connect_timeout' => 5.0,
                 'recv_timeout' => 5.0,
                 'settings' => [
-                    // 包体大小，若小于 Server 返回的数据大小，则会抛出异常，尽量控制包体大小
+                    // 包体最大值，若小于 Server 返回的数据大小，则会抛出异常，故尽量控制包体大小
                     'package_max_length' => 1024 * 1024 * 2,
                 ],
                 // 重试次数，默认值为 2
