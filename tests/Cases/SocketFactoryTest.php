@@ -28,16 +28,16 @@ class SocketFactoryTest extends AbstractTestCase
     {
         $container = ContainerStub::mockContainer();
 
-        $factory = new SocketFactory($container, collect([
-            'connect_timeout' => 5.0,
+        $factory = new SocketFactory($container, [
+            'connect_timeout' => $connectTimeout = rand(5, 10),
             'settings' => [
-                'package_max_length' => $lenght = rand(1000,9999),
+                'package_max_length' => $lenght = rand(1000, 9999),
             ],
-            'recv_timeout' => 5.0,
+            'recv_timeout' => $recvTimeout = rand(5, 10),
             'retry_count' => 2,
             'retry_interval' => 100,
             'client_count' => 4,
-        ]));
+        ]);
 
         $factory->setLoadBalancer($balancer = \Mockery::mock(LoadBalancerInterface::class));
         $balancer->shouldReceive('getNodes')->andReturn([
@@ -54,8 +54,8 @@ class SocketFactoryTest extends AbstractTestCase
         $client = $clients[0];
         $invoker = new ClassInvoker($client);
         $this->assertSame(9501, $invoker->port);
-        // TODO: Added tests 
-        // $this->assertSame($lenght, $invoker->config->get('package_max_length'));
-
+        $this->assertSame($lenght, $invoker->config->get('package_max_length'));
+        $this->assertSame($connectTimeout, $invoker->config->get('connect_timeout'));
+        $this->assertSame($recvTimeout, $invoker->config->get('recv_timeout'));
     }
 }

@@ -14,7 +14,6 @@ namespace Hyperf\RpcMultiplex;
 use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\RpcMultiplex\Exception\NoAvailableNodesException;
 use Hyperf\Utils\Arr;
-use Hyperf\Utils\Collection;
 use Psr\Container\ContainerInterface;
 
 class SocketFactory
@@ -35,11 +34,11 @@ class SocketFactory
     protected $container;
 
     /**
-     * @var Collection
+     * @var array
      */
     protected $config;
 
-    public function __construct(ContainerInterface $container, Collection $config)
+    public function __construct(ContainerInterface $container, array $config)
     {
         $this->container = $container;
         $this->config = $config;
@@ -67,9 +66,9 @@ class SocketFactory
             $client = $this->clients[$i];
             $node = $nodes[$i % $nodeCount];
             $client->setName($node->host)->setPort($node->port)->set([
-                'package_max_length' => $this->config->get('settings.package_max_length', 1024 * 1024 * 2),
-                'recv_timeout' => $this->config->get('recv_timeout', 10),
-                'connect_timeout' => $this->config->get('connect_timeout', 0.5),
+                'package_max_length' => $this->config['settings']['package_max_length'] ?? 1024 * 1024 * 2,
+                'recv_timeout' => $this->config['recv_timeout'] ?? 10,
+                'connect_timeout' => $this->config['connect_timeout'] ?? 0.5,
             ]);
         }
     }
@@ -95,6 +94,6 @@ class SocketFactory
 
     protected function getCount(): int
     {
-        return (int) $this->config->get('client_count', 4);
+        return (int) $this->config['client_count'] ?? 4;
     }
 }
