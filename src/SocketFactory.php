@@ -66,7 +66,11 @@ class SocketFactory
             }
             $client = $this->clients[$i];
             $node = $nodes[$i % $nodeCount];
-            $client->setName($node->host)->setPort($node->port);
+            $client->setName($node->host)->setPort($node->port)->set([
+                'package_max_length' => $this->config->get('settings.package_max_length', 1024 * 1024 * 2),
+                'recv_timeout' => $this->config->get('recv_timeout', 10),
+                'connect_timeout' => $this->config->get('connect_timeout', 0.5),
+            ]);
         }
     }
 
