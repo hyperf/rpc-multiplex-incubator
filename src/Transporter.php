@@ -44,8 +44,8 @@ class Transporter implements TransporterInterface
 
     public function __construct(ContainerInterface $container, array $config = [])
     {
-        $this->config = array_replace_recursive($this->config, $config);
         $this->container = $container;
+        $this->config = array_replace_recursive($this->config, $config);
         $this->factory = make(SocketFactory::class, ['config' => $this->config]);
     }
 
@@ -68,19 +68,5 @@ class Transporter implements TransporterInterface
     {
         $this->factory->setLoadBalancer($loadBalancer);
         return $this;
-    }
-
-    protected function getDefaultConfig(): array
-    {
-        return [
-            'connect_timeout' => 5.0,
-            'settings' => [
-                'package_max_length' => 1024 * 1024 * 2,
-            ],
-            'recv_timeout' => 5.0,
-            'retry_count' => 2,
-            'retry_interval' => 100,
-            'client_count' => 4,
-        ];
     }
 }

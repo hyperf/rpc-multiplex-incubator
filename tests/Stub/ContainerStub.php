@@ -13,6 +13,7 @@ namespace HyperfTest\Stub;
 
 use Hyperf\Di\Container;
 use Hyperf\RpcMultiplex\Socket;
+use Hyperf\RpcMultiplex\SocketFactory;
 use Hyperf\Utils\ApplicationContext;
 use Mockery;
 use Multiplex\Constract\IdGeneratorInterface;
@@ -29,12 +30,15 @@ class ContainerStub
         $container = Mockery::mock(Container::class);
         ApplicationContext::setContainer($container);
         $container->shouldReceive('get')->with(PackerInterface::class)->andReturn(new Packer());
-        $container->shouldReceive('make')->with(Socket::class, Mockery::any())->andReturnUsing(function ($_, $args) use ($container) {
+        $container->shouldReceive('make')->with(Socket::class, Mockery::any())->andReturnUsing(function () use ($container) {
             return new Socket($container);
         });
         $container->shouldReceive('get')->with(IdGeneratorInterface::class)->andReturn(new IdGenerator());
         $container->shouldReceive('get')->with(SerializerInterface::class)->andReturn(new StringSerializer());
         $container->shouldReceive('get')->with(PackerInterface::class)->andReturn(new Packer());
+        $container->shouldReceive('make')->with(SocketFactory::class, Mockery::any())->andReturnUsing(function ($_, $args) use ($container) {
+            return new SocketFactory($container, ...array_values($args));
+        });
         return $container;
     }
 }

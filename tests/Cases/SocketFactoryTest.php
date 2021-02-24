@@ -47,6 +47,8 @@ class SocketFactoryTest extends AbstractTestCase
 
         $factory->refresh();
 
+        $this->assertSame($connectTimeout, (new ClassInvoker($factory))->config['connect_timeout']);
+
         $clients = (new ClassInvoker($factory))->clients;
         $this->assertSame(4, count($clients));
 
