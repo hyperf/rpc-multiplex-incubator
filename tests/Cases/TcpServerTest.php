@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace HyperfTest\Cases;
+namespace HyperfTest\RpcMultiplex\Cases;
 
 use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
@@ -22,7 +22,7 @@ use Hyperf\Server\Event;
 use Hyperf\Server\Exception\InvalidArgumentException;
 use Hyperf\Server\Server;
 use Hyperf\Utils\Reflection\ClassInvoker;
-use HyperfTest\Stub\ContainerStub;
+use HyperfTest\RpcMultiplex\Stub\ContainerStub;
 use Mockery;
 
 /**

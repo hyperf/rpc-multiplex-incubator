@@ -9,14 +9,14 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
-namespace HyperfTest\Cases;
+namespace HyperfTest\RpcMultiplex\Cases;
 
 use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\LoadBalancer\Node;
 use Hyperf\RpcMultiplex\Socket;
 use Hyperf\RpcMultiplex\SocketFactory;
 use Hyperf\Utils\Reflection\ClassInvoker;
-use HyperfTest\Stub\ContainerStub;
+use HyperfTest\RpcMultiplex\Stub\ContainerStub;
 
 /**
  * @internal
