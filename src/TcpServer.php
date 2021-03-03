@@ -20,6 +20,7 @@ use Hyperf\HttpServer\Contract\CoreMiddlewareInterface;
 use Hyperf\Rpc\Protocol;
 use Hyperf\Rpc\ProtocolManager;
 use Hyperf\RpcMultiplex\Contract\HttpMessageBuilderInterface;
+use Hyperf\RpcMultiplex\Exception\Handler\DefaultExceptionHandler;
 use Hyperf\RpcServer\RequestDispatcher;
 use Hyperf\RpcServer\Server;
 use Hyperf\Server\Exception\InvalidArgumentException;
@@ -170,5 +171,12 @@ class TcpServer extends Server
         }
 
         throw new InvalidArgumentException(sprintf('Server name %s is invalid.', $serverName));
+    }
+
+    protected function getDefaultExceptionHandler(): array
+    {
+        return [
+            DefaultExceptionHandler::class,
+        ];
     }
 }
