@@ -95,6 +95,11 @@ class TcpServer extends Server
     {
         Coroutine::create(function () use ($server, $fd, $fromId, $data) {
             $packet = $this->packetPacker->unpack($data);
+            if ($packet->isHeartbeat()) {
+                $response = new Response();
+                $this->send($server, $fd, $response->withContent(Packet::PONG));
+                return;
+            }
 
             Context::set(Constant::CHANNEL_ID, $packet->getId());
 

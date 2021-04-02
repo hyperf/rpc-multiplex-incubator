@@ -27,7 +27,7 @@
         "hyperf/rpc-server": "^2.1",
         "hyperf/server": "^2.1",
         "hyperf/utils": "^2.1",
-        "multiplex/socket": "^0.1.0"
+        "multiplex/socket": "^0.2"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
@@ -54,6 +54,9 @@
     "extra": {
         "hyperf": {
             "config": "Hyperf\\RpcMultiplex\\ConfigProvider"
+        },
+        "branch-alias": {
+            "dev-main": "0.3-dev"
         }
     }
 }
