@@ -79,6 +79,8 @@ return [
                 'retry_interval' => 100,
                 // 多路复用客户端数量
                 'client_count' => 4,
+                // 心跳间隔 非 numeric 表示不开启心跳
+                'heartbeat' => 30,
             ],
         ],
     ],
