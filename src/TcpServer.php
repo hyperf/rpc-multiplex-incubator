@@ -91,9 +91,9 @@ class TcpServer extends Server
         parent::initCoreMiddleware($serverName);
     }
 
-    public function onReceive($server, int $fd, int $fromId, string $data): void
+    public function onReceive($server, int $fd, int $reactorId, string $data): void
     {
-        Coroutine::create(function () use ($server, $fd, $fromId, $data) {
+        Coroutine::create(function () use ($server, $fd, $reactorId, $data) {
             $packet = $this->packetPacker->unpack($data);
             if ($packet->isHeartbeat()) {
                 $response = new Response();
@@ -103,7 +103,7 @@ class TcpServer extends Server
 
             Context::set(Constant::CHANNEL_ID, $packet->getId());
 
-            parent::onReceive($server, $fd, $fromId, $packet->getBody());
+            parent::onReceive($server, $fd, $reactorId, $packet->getBody());
         });
     }
 
@@ -128,7 +128,7 @@ class TcpServer extends Server
         return new CoreMiddleware($this->container, $this->protocol, $this->messageBuilder, $this->serverName);
     }
 
-    protected function buildRequest(int $fd, int $fromId, string $data): ServerRequestInterface
+    protected function buildRequest(int $fd, int $reactorId, string $data): ServerRequestInterface
     {
         $parsed = $this->packer->unpack($data);
 
