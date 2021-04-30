@@ -46,6 +46,26 @@ return [
 
 ```
 
+创建 `RpcService`
+
+```php
+<?php
+
+namespace App\RPC;
+
+use App\JsonRpc\CalculatorServiceInterface;
+use Hyperf\RpcMultiplex\Constant;
+use Hyperf\RpcServer\Annotation\RpcService;
+
+/**
+ * @RpcService(name="CalculatorService", server="rpc", protocol=Constant::PROTOCOL_DEFAULT)
+ */
+class CalculatorService implements CalculatorServiceInterface
+{
+}
+
+```
+
 ## 客户端配置
 
 修改 `config/autoload/services.php` 配置文件

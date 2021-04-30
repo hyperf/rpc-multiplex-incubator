@@ -16,7 +16,7 @@ jobs:
         os: [ ubuntu-latest ]
         php-version: [ '7.3', '7.4' ]
         engine: [ 'swoole' ]
-        swoole-version: [ '4.5.11', '4.6.3' ]
+        swoole-version: [ '4.5.11', '4.6.6' ]
       max-parallel: 5
     steps:
       - name: Checkout
