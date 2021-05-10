@@ -13,33 +13,33 @@ namespace Hyperf\RpcMultiplex;
 
 class Constant
 {
-    const PROTOCOL_DEFAULT = 'multiplex.default';
+    public const PROTOCOL_DEFAULT = 'multiplex.default';
 
-    const REQUEST_ID = 'request_id';
+    public const REQUEST_ID = 'request_id';
 
-    const ID = 'id';
+    public const ID = 'id';
 
-    const PATH = 'path';
+    public const PATH = 'path';
 
-    const DATA = 'data';
+    public const DATA = 'data';
 
-    const RESULT = 'result';
+    public const RESULT = 'result';
 
-    const CONTEXT = 'context';
+    public const CONTEXT = 'context';
 
-    const ERROR = 'error';
+    public const ERROR = 'error';
 
-    const CODE = 'code';
+    public const CODE = 'code';
 
-    const MESSAGE = 'message';
+    public const MESSAGE = 'message';
 
-    const HOST = 'host';
+    public const HOST = 'host';
 
-    const PORT = 'port';
+    public const PORT = 'port';
 
-    const CHANNEL_ID = 'multiplex.channel_id';
+    public const CHANNEL_ID = 'multiplex.channel_id';
 
-    const DEFAULT_SETTINGS = [
+    public const DEFAULT_SETTINGS = [
         'open_length_check' => true,
         'package_length_type' => 'N',
         'package_length_offset' => 0,
