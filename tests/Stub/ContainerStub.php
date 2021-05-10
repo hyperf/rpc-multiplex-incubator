@@ -11,7 +11,10 @@ declare(strict_types=1);
  */
 namespace HyperfTest\RpcMultiplex\Stub;
 
+use Hyperf\Config\Config;
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Di\Container;
+use Hyperf\Framework\Logger\StdoutLogger;
 use Hyperf\RpcMultiplex\Socket;
 use Hyperf\RpcMultiplex\SocketFactory;
 use Hyperf\Utils\ApplicationContext;
@@ -29,6 +32,8 @@ class ContainerStub
     {
         $container = Mockery::mock(Container::class);
         ApplicationContext::setContainer($container);
+        $container->shouldReceive('has')->with(StdoutLoggerInterface::class)->andReturnTrue();
+        $container->shouldReceive('get')->with(StdoutLoggerInterface::class)->andReturn(new StdoutLogger(new Config([])));
         $container->shouldReceive('get')->with(PackerInterface::class)->andReturn(new Packer());
         $container->shouldReceive('make')->with(Socket::class, Mockery::any())->andReturnUsing(function () use ($container) {
             return new Socket($container);
