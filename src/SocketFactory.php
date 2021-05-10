@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace Hyperf\RpcMultiplex;
 
+use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\LoadBalancer\LoadBalancerInterface;
 use Hyperf\RpcMultiplex\Exception\NoAvailableNodesException;
 use Hyperf\Utils\Arr;
@@ -65,14 +66,15 @@ class SocketFactory
             }
             $client = $this->clients[$i];
             $node = $nodes[$i % $nodeCount];
-            $client->setName($node->host)
-                ->setPort($node->port)
-                ->set([
-                    'package_max_length' => $this->config['settings']['package_max_length'] ?? 1024 * 1024 * 2,
-                    'recv_timeout' => $this->config['recv_timeout'] ?? 10,
-                    'connect_timeout' => $this->config['connect_timeout'] ?? 0.5,
-                    'heartbeat' => $this->config['heartbeat'] ?? null,
-                ]);
+            $client->setName($node->host)->setPort($node->port)->set([
+                'package_max_length' => $this->config['settings']['package_max_length'] ?? 1024 * 1024 * 2,
+                'recv_timeout' => $this->config['recv_timeout'] ?? 10,
+                'connect_timeout' => $this->config['connect_timeout'] ?? 0.5,
+                'heartbeat' => $this->config['heartbeat'] ?? null,
+            ]);
+            if ($this->container->has(StdoutLoggerInterface::class)) {
+                $client->setLogger($this->container->get(StdoutLoggerInterface::class));
+            }
         }
     }
 
