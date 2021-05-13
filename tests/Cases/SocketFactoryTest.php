@@ -60,4 +60,33 @@ class SocketFactoryTest extends AbstractTestCase
         $this->assertSame($connectTimeout, $invoker->config->get('connect_timeout'));
         $this->assertSame($recvTimeout, $invoker->config->get('recv_timeout'));
     }
+
+    public function testSocketRefreshInMoreThanOneCoroutine()
+    {
+        $container = ContainerStub::mockContainer();
+
+        $factory = new SocketFactory($container, [
+            'connect_timeout' => $connectTimeout = rand(5, 10),
+            'settings' => [
+                'package_max_length' => $lenght = rand(1000, 9999),
+            ],
+            'recv_timeout' => $recvTimeout = rand(5, 10),
+            'retry_count' => 2,
+            'retry_interval' => 100,
+            'client_count' => 4,
+        ]);
+
+        go(function () use ($factory) {
+            $factory->setLoadBalancer($balancer = \Mockery::mock(LoadBalancerInterface::class));
+            $balancer->shouldReceive('getNodes')->andReturn([
+                new Node('192.168.0.1', 9501),
+                new Node('192.168.0.2', 9501),
+            ]);
+
+            $factory->refresh();
+        });
+
+        $class = new ClassInvoker($factory);
+        $this->assertSame(4, count($class->clients));
+    }
 }
